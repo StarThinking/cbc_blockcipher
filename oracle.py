@@ -22,21 +22,29 @@ def unpad(s):
     #print 's = ' + binascii.hexlify(s)
     #print 'len(s) = ' + str(len(s))
     #print 'ord = ' + str(ord(s[len(s) - 1:]))
-    
+    s = s[len(s) - 16:] 
     last_byte = s[len(s) - 1:]
     pad_bytes = ord(last_byte)
+    #print 'pad_bytes = ' + str(pad_bytes)
     unpad_bytes = BLOCK_SIZE - pad_bytes
     unpad = s[:-pad_bytes]
+    #print 'unpad_bytes = ' + str(unpad_bytes)
     paddings = s[unpad_bytes:]
     byte_index = 0
+    #print 'unpad = ' + unpad
+    #print 'pad = ' + binascii.hexlify(paddings)
+    #print 'last_byte =' + binascii.hexlify(last_byte)
+    #print 'pad_bytes = ' + str(pad_bytes)
     while byte_index < pad_bytes:
+        #print 'byte_index = ' + str(byte_index)
         p = binascii.hexlify(paddings[byte_index])
         if (p != binascii.hexlify(last_byte)):
+            #print 'no becase:'
+            #print 'p = ' + p
+            #print 'last_byte = ' + binascii.hexlify(last_byte)
             return 'no'
         byte_index += 1
 
-    #print 'unpad = ' + unpad
-    #print 'pad = ' + binascii.hexlify(paddings)
     return 'yes'
 
 def oracle(key, enc):
@@ -68,5 +76,5 @@ def oracle(key, enc):
     return unpad(binascii.unhexlify(plaintext_hexchar))
 
 if __name__ == '__main__':
-        print oracle(key, binascii.unhexlify(sys.argv[1]))
+    print oracle(key, binascii.unhexlify(sys.argv[1]))
 
