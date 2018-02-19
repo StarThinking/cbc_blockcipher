@@ -8,24 +8,18 @@ BLOCK_SIZE = 16
 hexchar_in_block = 32
 
 key = binascii.unhexlify('00112233445566778899aabbccddeeff')
-iv = '10000200000000100000000000a00000'
+iv = '01234567890123455432109876543211'
 
 def pad(s):
     pad_len = BLOCK_SIZE - len(s) % BLOCK_SIZE
     if (pad_len == 0):
         pad_len = BLOCK_SIZE
-    print('pad_len (bytes) = ' + str(pad_len))
+#    print('pad_len (bytes) = ' + str(pad_len))
 #    print('s = ' + binascii.hexlify(s))
     return (s + pad_len * chr(pad_len).encode('ascii'))
 
 def unpad(s):
-    print 's = ' + binascii.hexlify(s)
-    print 'len(s)'
-    print len(s)
-    print 's[15:]'
-    print binascii.hexlify(s[15:])
-    print 'ord'
-    print -ord(s[len(s) - 1:])
+#    print('unpad s = ' + binascii.hexlify(s))
     return s[:-ord(s[len(s) - 1:])]
 
 def encrypt(key, raw):
@@ -70,6 +64,7 @@ def decrypt(key, enc):
         end = start + hexchar_in_block
         cblock_hexchar = ciphertext_hexchar[start:end]
         xor1_hexchar = binascii.hexlify(cipher.decrypt(binascii.unhexlify(cblock_hexchar)))
+#        print 'xor1_hexchar = ' + xor1_hexchar
         xor1 = int(xor1_hexchar, base=16)
         
         if (block_index == 0):

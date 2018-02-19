@@ -1,0 +1,66 @@
+import binascii
+
+import sys
+import oracle
+
+BLOCK_SIZE = 16
+
+#iv = '01234567890123455432109876543210'
+#ctext = 'f900858b84c099be09b5df153cee31b1eb8a7f8fdc2f3e46a19b7372d8af76a722ba73be4a93746909b235de90622b812432df2d3fc025ae7341caa7586b911d'
+ctext = '636f6e67726164756c6174696f6e7320636f6e67726164756c6174696f6e7301'
+
+if __name__ == '__main__':
+    #print 'len(enc) = ' + str(len(enc))
+
+    C2 = ctext[32 : 64]
+    C1 = ctext[0 : 32]
+    the_map = {}
+    
+    byte_index = 14
+    assumed_pad = 1
+
+    print 'C1 = ' + C1
+
+    while byte_index == 14:
+        
+        print 'byte_index = ' + str(byte_index)
+        hex_pos = byte_index * 2
+        guess_index = 0
+        the_list = []
+
+        while guess_index < 256:
+            
+            # 
+            C1_hex = C1[hex_pos : hex_pos+2]
+            C1_hex_int = int(C1_hex, base=16)
+            pad_hex = hex(assumed_pad)[2:].zfill(2)
+            pad_hex_int = int(pad_hex, base=16)
+            guess_hex = hex(guess_index)[2:].zfill(2)
+            guess_hex_int = int(guess_hex, base=16)
+            xor = C1_hex_int ^ guess_hex_int ^ pad_hex_int
+            xor_hex = hex(xor)[2:].zfill(2)
+            
+            _guess_hex = '01'
+            _guess_hex_int = int(_guess_hex, base=16)
+            _C1_hex = C1[30 : 32]
+            _C1_hex_int = int(_C1_hex, base=16)
+            _xor = _C1_hex_int ^ guess_hex_int ^ pad_hex_int
+            _xor_hex = hex(_xor)[2:].zfill(2)
+
+            C1_prime = C1[:hex_pos] + xor_hex + _xor_hex
+
+            print 'C1_prime = ' + C1_prime
+
+            if (oracle.verify(C1_prime + C2) == 'yes'):
+                print 'yes, guess_hex = ' + guess_hex
+                the_list.append(guess_hex)
+
+            guess_index += 1
+        
+        the_map[byte_index] = the_list
+        byte_index -= 1
+        assumed_pad += 1
+
+    for k in the_map.keys():
+        print str(k) + ":" 
+        print the_map[k]
