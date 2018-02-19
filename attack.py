@@ -87,7 +87,7 @@ def attack(Cn_1, Cn, last_block):
 
     Pn = int(Cn_1, base=16) ^ int(final_dkcn_hex, base=16)
     Pn_hex = hex(Pn)[2:-1].zfill(BLOCK_SIZE*2)
-    print 'Pn_hex = ' + Pn_hex
+    #print 'Pn_hex = ' + Pn_hex
 
     if (last_block == 'no'):
         print binascii.b2a_qp(binascii.unhexlify(Pn_hex))

@@ -13,7 +13,7 @@ def pad(s):
     if (pad_len == 0):
         pad_len = BLOCK_SIZE
     print('pad_len = ' + str(pad_len))
-    print('s = ' + binascii.hexlify(s))
+#    print('s = ' + binascii.hexlify(s))
     return (s + pad_len * chr(pad_len).encode('ascii'))
 
 def unpad(s):
@@ -21,7 +21,7 @@ def unpad(s):
 
 def encrypt(key, raw):
     raw = pad(raw)
-    print('raw = ' + binascii.hexlify(raw))
+    print('padded = ' + binascii.hexlify(raw))
     cipher = AES.new(key, AES.MODE_ECB)
     return cipher.encrypt(raw)
 

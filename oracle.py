@@ -8,7 +8,7 @@ BLOCK_SIZE = 16
 hexchar_in_block = 32
 
 key = binascii.unhexlify('00112233445566778899aabbccddeeff')
-iv = '10000200000000100000000000a00000'
+iv = '01234567890123455432109876543211'
 
 def pad(s):
     pad_len = BLOCK_SIZE - len(s) % BLOCK_SIZE
